@@ -51,8 +51,7 @@ func main() {
 	slice := strings.Split(text, " ")
 
 	if len(slice) != 3 {
-		fmt.Println("Неверый формат математической операции")
-		return
+		panic("Неверый формат математической операции")
 	}
 
 	var a, b int
@@ -65,13 +64,11 @@ func main() {
 	bType := IsRomanOrArabic(second)
 
 	if aType == "Neither" || bType == "Neither" {
-		fmt.Println("Число(-а) не являются подходящими")
-		return
+		panic("Число(-а) не являются подходящими")
 	}
 
 	if aType != bType {
-		fmt.Println("Используются разные системы счисления")
-		return
+		panic("Используются разные системы счисления")
 	}
 
 	if aType == "Roman" {
@@ -83,18 +80,19 @@ func main() {
 	}
 
 	if a > 10 || a < 1 || b > 10 || b < 1 {
-		fmt.Println("Число(-а) выходит(-ят) за пределы допустимого диапазона")
-		return
+		panic("Число(-а) выходит(-ят) за пределы допустимого диапазона")
 	}
 
 	result, err := Calculate(a, b, op)
 
 	if err {
-		fmt.Println("Некорректный оператор")
-		return
+		panic("Некорректный оператор")
 	}
 
 	if aType == "Roman" {
+		if (result < 1) {
+			panic("Отрицательный результат или нулевой для римских чисел")
+		}
 		strResult := IntToRoman(result)
 		fmt.Println(strResult)
 		return
